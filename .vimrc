@@ -104,3 +104,6 @@ if has('mouse')
   set mouse=a
 endif
 
+packloadall
+silent! helptags ALL
+
