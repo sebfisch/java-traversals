@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 class TraversalTest {
   @Test
-  public void testSetup() {
-    assertEquals(6*7,42);
+  public void testStreaming() {
+    assertEquals(42, new Traversal.For<Integer>().traverse(42).findFirst().orElse(0));
   }
 }
