@@ -13,4 +13,4 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 ENV MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 ENV EDITOR=vim
 WORKDIR "$USER_HOME_DIR"
-CMD tmux
+CMD tmux attach-session -t dev
