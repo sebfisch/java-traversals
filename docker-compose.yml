@@ -1,7 +1,12 @@
 version: '3'
+volumes:
+        m2:
 services:
         dev:
-                build: .
-                hostname: java-traversals
+                image: sebfisch/java-dev:latest
+                hostname: java-dev
+                environment:
+                        - TZ=Europe/Berlin
                 volumes:
-                        - .:/root
+                        - m2:/root/.m2
+                        - .:/root/java-traversals
