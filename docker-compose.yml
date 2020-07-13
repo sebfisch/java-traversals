@@ -3,14 +3,25 @@ volumes:
         home:
 services:
         dev:
-                image: sebfisch/java-dev:latest
+                build:
+                        context: /home/sf/code/docker-java-dev
+# Adjust the build args to reflect your local setup
+                        args:
+                                HOME: /home/sf # echo $HOME
+                                USER: sf       # id -u -n
+                                UID: 1000      # id -u
+                                GROUP: sf      # id -g -n
+                                GID: 1000      # id -g
                 hostname: java-dev
                 environment:
-                        - TZ=Europe/Berlin
-# The following line disables class data sharing
-# which leads to a corresponding warning message on some architectures.
-                        - JAVA_OPTIONS=-Xshare:off
+# Adjust to reflect your own timezone
+                        - TZ=Europe/Berlin 
+# The following line disables class data sharing for the JVM
+# which leads to a warning message on some architectures.
+                        - JAVA_OPTIONS=-Xshare:off 
+# Adjust directories and user to reflect above changes to build args
                 volumes:
-                        - home:/root
-                        - .:/root/java-traversals
-                working_dir: /root/java-traversals
+                        - home:/home/sf
+                        - .:/home/sf/java-traversals
+                working_dir: /home/sf/java-traversals
+                user: sf

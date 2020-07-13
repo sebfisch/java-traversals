@@ -5,11 +5,19 @@
 This repository contains a `docker-compose.yml` file
 which allows to run a terminal based development environment
 in a docker container.
-This environment basically consists of `git`, `mvn`,
+When building the container, a user is created
+based on build args defined in the `docker-compose.yml` file.
+To avoid permission issues,
+you can adjust the listed build args to reflect your local setup.
+After adjusting the build args appropriately,
+you can build the container with the following command:
+
+    docker-compose build
+
+The development environment basically consists of `git`, `mvn`,
 and `vim` with plugins for Java development.
 
-If you have installed [docker compose]
-you can run the tests using the following command:
+You can run the tests using the following command:
 
     docker-compose run --rm dev mvn test
 
@@ -22,6 +30,10 @@ for developing, building, and testing the underlying code,
 run the following command:
 
     docker-compose run --rm dev
+
+Whenever you start bash in the container
+(which happens automatically when you do not specify a different command)
+Java dependencies will be resolved automatically and cached for future use.
 
 Before running the container you can change the value
 
