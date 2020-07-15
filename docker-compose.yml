@@ -19,9 +19,9 @@ services:
 # The following line disables class data sharing for the JVM
 # which leads to a warning message on some architectures.
                         - JAVA_OPTIONS=-Xshare:off 
-# Adjust directories and user to reflect above changes to build args
                 volumes:
-                        - home:/home/sf
+                        - home:/home
+# Adjust directories and user to reflect above changes to build args
                         - .:/home/sf/java-traversals
                 working_dir: /home/sf/java-traversals
                 user: sf
