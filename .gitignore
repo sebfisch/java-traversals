@@ -1,9 +1,4 @@
 *~
 *.tmp
 target
-.vim
-.m2
-.*ash_history
-.viminfo
 .hawtjni
-.gitconfig
