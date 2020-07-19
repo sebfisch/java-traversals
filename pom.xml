@@ -144,7 +144,7 @@
                       <maximum>0</maximum>
                     </limit>
                   </limits>
-                </rule> 
+                </rule>
               </rules>
             </configuration>
           </execution>
@@ -175,8 +175,14 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <version>5.6.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <version>5.6.2</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
 </project>
-
