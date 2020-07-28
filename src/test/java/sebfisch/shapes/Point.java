@@ -25,6 +25,11 @@ public class Point {
   }
 
   @Override
+  public String toString() {
+    return "(" + x + "," + y + ")";
+  }
+
+  @Override
   public boolean equals(Object that) {
     return (that instanceof Point) && equals((Point) that);
   }
@@ -36,27 +41,39 @@ public class Point {
    * @return if the given point has the same coordinates
    */
   public boolean equals(Point that) {
-    return x == that.x && y == that.y;
+    return closeDouble(x, that.x) && closeDouble(y, that.y);
+  }
+
+  private static final double PRECISION = 1e-10;
+
+  private static boolean closeDouble(final double x, final double y) {
+    return Math.abs(x - y) < PRECISION;
   }
 
   /**
    * Adds the coordinates of another point to this points coordinates.
    *
    * @param that another point
+   * @return this point, mutated
    */
-  public void add(final Point that) {
+  public Point add(final Point that) {
     x += that.x;
     y += that.y;
+
+    return this;
   }
 
   /**
    * Scales the coordinates of this point by a given factor.
    *
    * @param factor factor to scale with
+   * @return this point, mutated
    */
-  public void scale(final double factor) {
+  public Point scale(final double factor) {
     x *= factor;
     y *= factor;
+
+    return this;
   }
 
   /**
