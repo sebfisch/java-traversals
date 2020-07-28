@@ -7,17 +7,17 @@ import java.util.stream.Stream;
 /**
  * A Traversal can be used to traverse parts of structured data.
  *
- * @param <S> type of a data structure
+ * @param <R> type of the root structure
  * @param <P> type of traversed parts
  */
-public abstract class Traversal<S, P> implements Function<Consumer<P>, Consumer<S>> {
+public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
 
   /**
    * Creates a traversal for a specified type that traverses the root of given data.
    *
    * @param <T> type of traversed data
    */
-  public static class For<T> extends Traversal<T, T> {
+  static class For<T> implements Traversal<T, T> {
     @Override
     public Consumer<T> apply(final Consumer<T> ct) {
       return ct;
@@ -27,22 +27,46 @@ public abstract class Traversal<S, P> implements Function<Consumer<P>, Consumer<
   /**
    * Provides access to traversed parts with a {@link Consumer}.
    *
-   * @param s structured data
-   * @param cp consumer of parts
+   * @param root structured data
+   * @param partConsumer consumer of parts
    */
-  public void traverse(final S s, final Consumer<P> cp) {
-    apply(cp).accept(s);
+  default void traverse(final R root, final Consumer<P> partConsumer) {
+    apply(partConsumer).accept(root);
   }
 
   /**
    * Provides access to a {@link Stream} of traversed parts.
    *
-   * @param s structured data
+   * @param root structured data
    * @return stream of traversed parts
    */
-  public Stream<P> partsOf(final S s) {
+  default Stream<P> partsOf(final R root) {
     final Stream.Builder<P> sb = Stream.builder();
-    traverse(s, sb);
+    traverse(root, sb);
     return sb.build();
+  }
+
+  /**
+   * Compute a new traversal traversing the element returned by the given function applied to all
+   * parts.
+   *
+   * @param <Q> type of new parts
+   * @param get function computing a new part from old ones
+   * @return new traversal for new parts
+   */
+  default <Q> Traversal<R, Q> map(final Function<P, Q> get) {
+    return cq -> apply(p -> cq.accept(get.apply(p)));
+  }
+
+  /**
+   * Compute a new traversal traversing each element returned by the given function applied to all
+   * parts.
+   *
+   * @param <Q> type of new parts
+   * @param get function computing an arbitrary number of new parts from old ones
+   * @return new traversal for new parts
+   */
+  default <Q> Traversal<R, Q> flatMap(final Function<P, Iterable<Q>> get) {
+    return cq -> apply(p -> get.apply(p).forEach(cq));
   }
 }
