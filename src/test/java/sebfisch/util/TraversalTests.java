@@ -115,6 +115,7 @@ public class TraversalTests {
    * computed property.
    *
    * @param shape instantiated with random shapes
+   * @param newCenter instantiated with random points
    */
   @ParameterizedTest
   @MethodSource("rndShapeAndPointProvider")
@@ -122,8 +123,8 @@ public class TraversalTests {
     Shape.CENTER.traverse(
         shape,
         center -> {
-          center.x = newCenter.x;
-          center.y = newCenter.y;
+          center.setX(newCenter.getX());
+          center.setY(newCenter.getY());
         });
     assertEquals(newCenter, shape.getCenter());
   }

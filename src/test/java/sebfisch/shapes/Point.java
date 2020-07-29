@@ -1,32 +1,69 @@
 package sebfisch.shapes;
 
-import java.util.Collection;
-import java.util.Optional;
 import sebfisch.test.gen.random.RandomGenerator;
 
 /** A point in 2D space with double precision coordinates. */
 public class Point {
 
-  /** X coordinate. */
-  public double x;
-
-  /** Y coordinate */
-  public double y;
+  private double thisX;
+  private double thisY;
 
   /**
    * Creates a new point at the given coordinates.
    *
-   * @param x x coordinate
-   * @param y y coordinate
+   * @param x X coordinate
+   * @param y Y coordinate
    */
   public Point(final double x, final double y) {
-    this.x = x;
-    this.y = y;
+    thisX = x;
+    thisY = y;
+  }
+
+  /**
+   * Provides access to the X coordinate of this point.
+   *
+   * @return the X coordinate
+   */
+  public double getX() {
+    return thisX;
+  }
+
+  /**
+   * Provides access to the Y coordinate of this point.
+   *
+   * @return the Y coordinate
+   */
+  public double getY() {
+    return thisY;
+  }
+
+  /**
+   * Modifies the X coordinate of this point.
+   *
+   * @param x new X coordinate
+   * @return this point, mutated
+   */
+  public Point setX(final double x) {
+    thisX = x;
+
+    return this;
+  }
+
+  /**
+   * Modifies the Y coordinate of this point.
+   *
+   * @param y new Y coordinate
+   * @return this point, mutated
+   */
+  public Point setY(final double y) {
+    thisY = y;
+
+    return this;
   }
 
   @Override
   public String toString() {
-    return "(" + x + "," + y + ")";
+    return "(" + thisX + "," + thisY + ")";
   }
 
   @Override
@@ -41,13 +78,13 @@ public class Point {
    * @return if the given point has the same coordinates
    */
   public boolean equals(Point that) {
-    return closeDouble(x, that.x) && closeDouble(y, that.y);
+    return closeDouble(getX(), that.getX()) && closeDouble(getY(), that.getY());
   }
 
   private static final double PRECISION = 1e-10;
 
-  private static boolean closeDouble(final double x, final double y) {
-    return Math.abs(x - y) < PRECISION;
+  private static boolean closeDouble(final double a, final double b) {
+    return Math.abs(a - b) < PRECISION;
   }
 
   /**
@@ -57,10 +94,7 @@ public class Point {
    * @return this point, mutated
    */
   public Point add(final Point that) {
-    x += that.x;
-    y += that.y;
-
-    return this;
+    return setX(getX() + that.getX()).setY(getY() + that.getY());
   }
 
   /**
@@ -70,30 +104,7 @@ public class Point {
    * @return this point, mutated
    */
   public Point scale(final double factor) {
-    x *= factor;
-    y *= factor;
-
-    return this;
-  }
-
-  /**
-   * Computes the geometric center as arithmetic mean of all given points. If no points are given,
-   * the result is empty.
-   *
-   * @param points points to compute centroid of
-   * @return geometric center of given points if at least one is given
-   */
-  public static Optional<Point> centroid(final Collection<Point> points) {
-    if (points.isEmpty()) {
-      return Optional.empty();
-    }
-
-    final Point result = new Point(0, 0);
-    for (final Point point : points) {
-      result.add(point);
-    }
-    result.scale(1.0 / points.size());
-    return Optional.of(result);
+    return setX(getX() * factor).setY(getY() * factor);
   }
 
   /** Random generator for arguments of unit tests. */

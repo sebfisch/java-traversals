@@ -39,7 +39,7 @@ public class Square implements Shape {
 
   @Override
   public Point getCenter() {
-    return new Point(topLeft.x, topLeft.y).add(new Point(size, size).scale(0.5));
+    return new Point(size, size).scale(0.5).add(topLeft);
   }
 
   /**
@@ -48,7 +48,7 @@ public class Square implements Shape {
    * @param newCenter new center
    */
   public void setCenter(final Point newCenter) {
-    topLeft.add(new Point(newCenter.x, newCenter.y).add(getCenter().scale(-1)));
+    topLeft.add(getCenter().scale(-1).add(newCenter));
   }
 
   /**

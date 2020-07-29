@@ -19,7 +19,7 @@ public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
    *
    * @param <T> type of traversed data
    */
-  static class For<T> implements Traversal<T, T> {
+  class For<T> implements Traversal<T, T> {
     @Override
     public Consumer<T> apply(final Consumer<T> ct) {
       return ct;
@@ -49,8 +49,8 @@ public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
   }
 
   /**
-   * Compute a new traversal traversing the element returned by the given function applied to all
-   * parts.
+   * Applies the given function to each part of the traversal to create a new traversal traversing
+   * the results.
    *
    * @param <Q> type of new parts
    * @param get function computing a new part from old ones
@@ -61,13 +61,13 @@ public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
   }
 
   /**
-   * Compute a new traversal traversing the element returned by the given function applied to all
-   * parts. The second argument is used to update the original part based on a changed new part.
+   * This variant of the map method has an additional synchronizing argument that can be used to
+   * update the original part based on a mutated new part.
    *
    * @param <Q> type of new parts
    * @param get function computing a new part from old ones
-   * @param put bi-consumer updating the old part based on a changed new part
-   * @return new traversal for new parts
+   * @param put bi-consumer updating the old part based on a mutated new part
+   * @return new traversal for synchronized new parts
    */
   default <Q> Traversal<R, Q> map(final Function<P, Q> get, final BiConsumer<P, Q> put) {
     return cq ->
@@ -80,8 +80,8 @@ public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
   }
 
   /**
-   * Compute a new traversal traversing each element returned by the given function applied to all
-   * parts.
+   * Flattening version of the map method where each old part is mapped to an arbitrary number of
+   * new parts.
    *
    * @param <Q> type of new parts
    * @param get function computing an arbitrary number of new parts from old ones
@@ -111,6 +111,7 @@ public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
    * Computes a composed traversal traversing each of this traversal's parts with the given
    * traversal.
    *
+   * @param <Q> type of nested parts
    * @param traversal traversal with this traversal's parts as roots
    * @return composed traversal
    */

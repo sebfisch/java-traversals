@@ -71,7 +71,7 @@
         <configuration>
           <encoding>UTF-8</encoding>
           <linkXref>true</linkXref>
-          <minimumTokens>10</minimumTokens>
+          <minimumTokens>50</minimumTokens>
           <targetJdk>14</targetJdk>
         </configuration>
       </plugin>
