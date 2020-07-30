@@ -33,9 +33,14 @@ public class Circle implements Shape {
     return radius;
   }
 
-  /** Traversal for the center point of a circle. */
-  public static final Traversal<Circle, Point> CENTER =
-      new Traversal.For<Circle>().map(Circle::getCenter);
+  /**
+   * Traversal for the center point of a circle.
+   *
+   * @return center traversal
+   */
+  public static Traversal<Circle, Point> center() {
+    return new Traversal.For<Circle>().map(Circle::getCenter);
+  }
 
   /** Random generator for circle arguments of unit tests. */
   public static class Gen extends RandomGenerator<Circle> {

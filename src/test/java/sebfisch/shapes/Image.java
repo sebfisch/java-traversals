@@ -23,9 +23,14 @@ public class Image {
     return shapes;
   }
 
-  /** Traversal for the shapes in an image. */
-  public static final Traversal<Image, Shape> SHAPES =
-      new Traversal.For<Image>().flatMap(Image::getShapes);
+  /**
+   * Traversal for the shapes in an image.
+   *
+   * @return shapes traversal
+   */
+  public static Traversal<Image, Shape> shapes() {
+    return new Traversal.For<Image>().flatMap(Image::getShapes);
+  }
 
   /** Random generator for image arguments of unit tests. */
   public static class Gen extends RandomGenerator<Image> {

@@ -22,8 +22,7 @@ public class Tests {
   @ParameterizedTest
   @ArgumentsSource(Circle.Gen.class)
   public void testMapContainsResult(final Circle circle) {
-    // Circle.CENTER = new Traversal.For<Circle>().map(Circle::getCenter);
-    assertEquals(circle.getCenter(), Circle.CENTER.partsOf(circle).findFirst().orElseThrow());
+    assertEquals(circle.getCenter(), Circle.center().partsOf(circle).findFirst().orElseThrow());
   }
 
   /**
@@ -34,7 +33,7 @@ public class Tests {
   @ParameterizedTest
   @ArgumentsSource(Shape.Gen.class)
   public void testShapeCenter(final Shape shape) {
-    assertEquals(shape.getCenter(), Shape.CENTER.partsOf(shape).findFirst().orElseThrow());
+    assertEquals(shape.getCenter(), Shape.center().partsOf(shape).findFirst().orElseThrow());
   }
 
   /**
@@ -46,8 +45,7 @@ public class Tests {
   @ParameterizedTest
   @ArgumentsSource(Image.Gen.class)
   public void testFlatMapCount(final Image image) {
-    // Image.SHAPES = new Traversal.For<Image>().flatMap(Image::getShapes);
-    assertEquals(image.getShapes().size(), Image.SHAPES.partsOf(image).count());
+    assertEquals(image.getShapes().size(), Image.shapes().partsOf(image).count());
   }
 
   /**
@@ -81,12 +79,13 @@ public class Tests {
   @ParameterizedTest
   @MethodSource("rndShapeAndPointProvider")
   public void testCenterUpdate(final Shape shape, final Point newCenter) {
-    Shape.CENTER.traverse(
-        shape,
-        center -> {
-          center.setX(newCenter.getX());
-          center.setY(newCenter.getY());
-        });
+    Shape.center()
+        .traverse(
+            shape,
+            center -> {
+              center.setX(newCenter.getX());
+              center.setY(newCenter.getY());
+            });
     assertEquals(newCenter, shape.getCenter());
   }
 

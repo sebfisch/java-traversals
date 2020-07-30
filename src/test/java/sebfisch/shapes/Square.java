@@ -54,9 +54,12 @@ public class Square implements Shape {
   /**
    * Traversal for the center of a square. The location of the square is updated based on a possibly
    * updated center.
+   *
+   * @return center traversal
    */
-  public static final Traversal<Square, Point> CENTER =
-      new Traversal.For<Square>().map(Square::getCenter, (sq, c) -> sq.setCenter(c));
+  public static Traversal<Square, Point> center() {
+    return new Traversal.For<Square>().map(Square::getCenter, (sq, c) -> sq.setCenter(c));
+  }
 
   /** Random generator for square arguments of unit tests. */
   public static class Gen extends RandomGenerator<Square> {

@@ -13,17 +13,20 @@ public interface Shape {
    */
   Point getCenter();
 
+  /**
+   * A traversal for the center location of a shape. Works for stored as well as computed centers.
+   *
+   * @return center traversal
+   */
+  public static Traversal<Shape, Point> center() {
+    return traversalFor(Circle.class)
+        .compose(Circle.center())
+        .andAlso(traversalFor(Square.class).compose(Square.center()));
+  }
+
   private static <S extends Shape> Traversal<Shape, S> traversalFor(final Class<S> clazz) {
     return new Traversal.For<Shape>().filter(clazz::isInstance).map(clazz::cast);
   }
-
-  /**
-   * A traversal for the center location of a shape. Works for stored as well as computed centers.
-   */
-  public Traversal<Shape, Point> CENTER =
-      traversalFor(Circle.class)
-          .compose(Circle.CENTER)
-          .andAlso(traversalFor(Square.class).compose(Square.CENTER));
 
   /** Random generator for shape arguments of unit tests. */
   public static class Gen extends RandomGenerator<Shape> {
