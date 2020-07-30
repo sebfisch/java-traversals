@@ -3,6 +3,7 @@ package sebfisch.util;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -128,5 +129,53 @@ public interface Traversal<R, P> extends Function<Consumer<P>, Consumer<R>> {
    */
   default Traversal<R, P> andAlso(final Traversal<R, P> traversal) {
     return cp -> apply(cp).andThen(traversal.apply(cp));
+  }
+
+  /**
+   * Creates a new traversal where parts have an associated index.
+   *
+   * @return new traversal for indexed parts
+   */
+  default Traversal<R, Indexed<P>> indexed() {
+    return cip ->
+        s -> {
+          final Counter counter = new Counter();
+          final Consumer<P> cp =
+              p -> {
+                cip.accept(new Indexed(counter.getAsInt(), p));
+                counter.increment();
+              };
+          apply(cp).accept(s);
+        };
+  }
+
+  /**
+   * Creates a traversal for those parts that have a valid index according to the given predicate.
+   *
+   * @param pred predicate on indices
+   * @return new traversal restricted to valid indices
+   */
+  default Traversal<R, P> onlyAt(final IntPredicate pred) {
+    return indexed().filter(ip -> pred.test(ip.getIndex())).map(Indexed::getValue);
+  }
+
+  /**
+   * Creates a traversal restricted to the part with the given index.
+   *
+   * @param index index of traversed part
+   * @return new traversal restricted to given index
+   */
+  default Traversal<R, P> onlyAt(final int index) {
+    return onlyAt(i -> i == index);
+  }
+
+  /**
+   * Creates a traversal restricted to parts with a different index.
+   *
+   * @param index index of filtered out part
+   * @return new traversal restricted to other indices
+   */
+  default Traversal<R, P> exceptAt(final int index) {
+    return onlyAt(i -> i != index);
   }
 }
